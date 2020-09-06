@@ -1,0 +1,1 @@
+var apiurl = "http://localhost/vkschoolbot/api";

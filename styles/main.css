@@ -1,0 +1,87 @@
+#maincontent
+{
+    margin: auto;
+    width: 60%;
+    background-color: #ffffff;
+    min-height: 40%;
+}
+ul#menu
+{
+    list-style-type: none;
+    padding-left: 0;
+}
+ul>li[act]
+{
+    color: #222222;
+    transition: 0.2s;
+}
+ul>li[act]:hover
+{
+    color: #888888;
+    cursor: pointer;
+}
+body
+{
+    background-image: url("../res/bg.png");
+    margin: 0;
+}
+h1.form-header
+{
+    text-align: center;
+    color: #ffffff;
+    margin-top: 3px;
+}
+#left-panel-wrap
+{
+    float: left;
+    background-color: #cccccc;
+    padding-top: 10px;
+    padding-left: 25px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    font-size: 1.5em;
+}
+.error_msg
+{
+    color: #ff1010;
+    display: none;
+}
+#login
+{
+    width: 40%;
+    height: auto;
+    margin: auto;
+    margin-top: 20%;
+    background: #000000aa;
+    text-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 20px;
+}
+#loginform>input
+{
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+    height: 3em;
+    text-align: center;
+    font-size: 1em;
+    border-radius: 25px;
+    border: none;
+    min-width: 20%;
+    transition: ease-in-out 0.1s;
+    background-color: #aaaaaa;
+}
+#loginform>input.input_text:focus
+{
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+#loginform>input:hover
+{
+    background-color: #dedede;
+}
+#loginform>input.input_text
+{
+    width: 80%;
+}
