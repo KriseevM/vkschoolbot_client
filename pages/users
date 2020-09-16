@@ -1,0 +1,109 @@
+<form id="useradd">
+<h2>Добавить пользователя</h2>
+<input type="text" placeholder="Имя нового пользователя" name="username" id="useradd_name" required /><br><input type="password" placeholder="Пароль" name="pass" id="useradd_pass" required /><br><label id="pr_level_lb">pr_level = 1</label><input type="checkbox" name="pr_2" id="useradd_pr" /><br><input type="submit" name="add" value="Создать" id="useradd_submit" />
+<script>
+$('#useradd_pr').change(function() {
+if($('#useradd_pr').is(":checked"))
+{
+$('#pr_level_lb')[0].innerHTML = "pr_level = 2";
+}
+else
+{
+$('#pr_level_lb')[0].innerHTML = "pr_level = 1";
+}
+});
+$('#useradd_submit').click(function(e){
+e.preventDefault();
+if($('#useradd_name')[0].value === "" || $('#useradd_pass')[0].value.length < 4)
+{
+alert("Заполните необходимую информацию: \nИмя пользователя, пароль (не короче 4 символов) и уровень привилегий")
+return false;
+}
+else
+{
+$.ajax({
+url: apiurl + "/addUser.php",
+data: JSON.stringify({
+user: $('#useradd_name')[0].value,
+pass: $('#useradd_pass')[0].value,
+pr: $('#useradd_pr').is(":checked") ? 2 : 1
+}),
+headers:{
+key: key
+},
+type: "post",
+contentType: "json",
+dataType: "json",
+success: function(data) {
+if(data.hasOwnProperty('added'))
+{
+if(data.added)
+{
+alert("Пользователь добавлен");
+}
+else
+{
+alert("Пользователь не добавлен");
+}
+}
+else if(data.hasOwnProperty('error'))
+{
+alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+}
+}
+});
+}
+});
+</script>
+</form>
+
+<form id="userdel">
+<h2>Удалить пользователя</h2>
+<input type="text" placeholder="Имя пользователя" name="username" id="userdel_name" required /><br /><input type="submit" name="del" value="Удалить" id="userdel_submit" />
+<script>
+$('#userdel_submit').click(function(e){
+e.preventDefault();
+if($('#userdel_name')[0].value === "")
+{
+alert("Введите имя пользователя, которого хотите удалить.");
+return false;
+}
+if($('#userdel_name')[0].value === username)
+{
+alert("Вы не можете удалить своего пользователя");
+return false;
+}
+else
+{
+$.ajax({
+url: apiurl + "/deleteUser.php",
+data: {
+    user: $('#userdel_name')[0].value
+},
+headers:{
+key: key
+},
+type: "get",
+dataType: "json",
+success: function(data) {
+if(data.hasOwnProperty('deleted'))
+{
+if(data.deleted)
+{
+alert("Пользователь удален");
+}
+else
+{
+alert("Пользователь не удален");
+}
+}
+else if(data.hasOwnProperty('error'))
+{
+alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+}
+}
+});
+}
+});
+</script>
+</form>

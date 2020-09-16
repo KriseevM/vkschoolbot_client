@@ -1,0 +1,121 @@
+<form>
+    <h2>Изменения в расписании</h2>
+    <select class="ch_num" id="ch_num_1">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_2">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_3">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_4">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_5">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_6">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_7">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <select class="ch_num" id="ch_num_8">
+        <option value="-2">Нет замены</option>
+        <option value="-1">Урок отсутствует</option>
+    </select><br />
+    <textarea name="ch_text" id="ch_text" placeholder="Текстовое описание изменений"></textarea>
+    <input type="submit" name="ch_save" id="ch_submit" value="Сохранить" />
+    <script>
+        $.ajax({
+            url: apiurl + "/getSubjects.php",
+            headers:{
+                key: key
+            },
+            type: "get",
+            dataType: "json",
+            success: function(data) {
+                if(Array.isArray(data)){
+                    for(var i = 0; i < 8; i++)
+                    {
+                        data.forEach(element => {
+                            var option = $('<option>' + element.Name + '</option>');
+                            option.val(element.ID);
+                            option.appendTo($('.ch_num')[i]);
+                        });
+                    }
+                    $.ajax({
+                        url: apiurl + "/getChanges.php",
+                        headers:{
+                            key: key
+                        },
+                        type: "get",
+                        dataType: "json",
+                        success: function(data) {
+                            if(data.hasOwnProperty("TextChanges")){
+                                $("#ch_text").first().val(data.TextChanges)
+                                data.NumericChanges.forEach(function(item, index){
+                                    $("#ch_num_" + (index + 1)).first().val(item);
+                                });
+                                $("#ch_submit").click(function(e) {
+                                    e.preventDefault();
+                                    var data = {};
+                                    data.TextChanges = $("#ch_text").first().val();
+                                    data.NumericChanges = [];
+                                    for(let i = 0; i < 8; i++)
+                                    {
+                                        data.NumericChanges.push(+$("#ch_num_" + (i + 1)).first().val());
+                                    }
+                                    $.ajax({
+                                        url: apiurl + "/updateChanges.php",
+                                        headers:{
+                                            key: key
+                                        },
+                                        type:"post",
+                                        dataType:"json",
+                                        contentType:"application/json",
+                                        data: JSON.stringify(data),
+                                        success: function(data)
+                                        {
+                                            if(data.hasOwnProperty("updated"))
+                                            {
+                                                if(data.updated)
+                                                {
+                                                    alert("Замены обновлены");
+                                                }
+                                                else
+                                                {
+                                                    alert("Замены не обновлены");
+                                                }
+                                            }
+                                            else if(data.hasOwnProperty("error"))
+                                            {
+                                                alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                            else if(data.hasOwnProperty('error'))
+                            {
+                                alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                            }
+                        }
+                    });
+                }
+                else if(data.hasOwnProperty('error'))
+                {
+                    alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                }
+            }
+        });
+    </script>
+</form>

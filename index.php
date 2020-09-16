@@ -7,6 +7,9 @@
         <link rel="stylesheet" href="styles/main.css" />
     </head>
     <body>
+        <a>
+            <form></form>
+        </a>
         <script>
             var loginform = $('<div id="login">\
                 <form method="POST" id="loginform">\
@@ -18,6 +21,8 @@
                 </form>\
             </div>');
             var contentwrap = $('<div id="left-panel-wrap">\
+                                    <h6 class="userdisplay">Пользователь:</h6>\
+                                    <h4 id="user_header" class="userdisplay"></h1>\
                                     <ul id="menu">\
                                         <li act="homework">ДЗ</li>\
                                         <li act="changes">Замены</li>\
@@ -26,7 +31,10 @@
                                 </div>\
                                 <div id="maincontent"></div>');
             
+            
             var key = "";
+            var username;
+            var pr = 1;
             loginform.find('#auth').click(function(e)
             {
                 e.preventDefault();
@@ -65,10 +73,31 @@
                             if(data.hasOwnProperty("key"))
                             {
                                 key = data.key;
+                                username = data.username;
+                                pr = data.pr;
                                 loginform.slideUp();
                                 loginform.detach();
                                 contentwrap.fadeOut(0);
                                 $('body').append(contentwrap);
+                                $('#user_header')[0].innerHTML = username;
+                                if(pr === 2)
+                                {
+                                    $('#menu').append('\
+                                    <li act="users">Пользователи</li>\
+                                    <li act="subjects">Предметы</li>\
+                                    ');
+                                }
+                                $('[act]').click(function()
+                                {
+                                    var page = "pages/" + $(this).attr('act');
+                                    $('#maincontent').fadeOut(500, function()
+                                    {
+                                        $(this).empty();
+                                        $(this).load(page, function(){
+                                            $(this).fadeIn(500);
+                                        });
+                                    });
+                                });
                                 contentwrap.fadeIn(500);
                             }
                             else if(data.hasOwnProperty("error"))

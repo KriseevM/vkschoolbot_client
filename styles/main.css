@@ -1,6 +1,41 @@
+#hw_text, #ch_text
+{
+    display: block;
+    resize: vertical;
+    min-height: 100px;
+    margin: 30px;
+    width: 80%;
+}
+form#useradd
+{
+    float: left;
+    width: 47.5%;
+    transition: 0.5s;
+    
+    padding-left: 20px;
+}
+form#userdel
+{
+    float: right;
+    width: 47.5%;
+    transition: 0.5s;
+    padding-left: 20px;
+}
+h4.userdisplay
+{
+    margin-top: 0px;
+    margin-bottom: 25px;
+}
+h6.userdisplay
+{
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-size: 0.55em;
+}
 #maincontent
 {
-    margin: auto;
+    float: left;
+    margin-left: 10px;
     width: 60%;
     background-color: #ffffff;
     min-height: 40%;

@@ -1,0 +1,98 @@
+<form id="hw">
+    <h2>Домашнее задание</h2>
+    <select id="hw_subjects" name="hw_subjects" disabled required>
+    </select>
+    <textarea name="hw_text" id="hw_text" placeholder="Домашнее задание"></textarea>
+    <input type="submit" value="Сохранить" name="hw_save" id="hw_submit" />
+    <script>
+        $("#hw_submit").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: apiurl + "/updateHomework.php",
+                headers:{
+                    key: key
+                },
+                type:"post",
+                dataType:"json",
+                contentType:"application/json",
+                data: JSON.stringify({
+                    ID: parseInt($('#hw_subjects').val(), 10),
+                    Homework: $('#hw_text').val()
+                }),
+                success: function(data)
+                {
+                    if(data.hasOwnProperty("updated"))
+                    {
+                        if(data.updated)
+                        {
+                            alert("Задание обновлено");
+                        }
+                        else
+                        {
+                            alert("Задание не обновлено");
+                        }
+                    }
+                    else if(data.hasOwnProperty("error"))
+                    {
+                        alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                    }
+                }
+            })
+        });
+        $('#hw_subjects').first().change(function(){
+            var Id = $('option:selected', this).val();
+            $.ajax({
+                url: apiurl + "/getHomework.php",
+                headers:{
+                    key: key
+                },
+                type: "get",
+                dataType: "json",
+                data: {
+                    id: Id
+                },
+                success: function(data)
+                {
+                    if(data.hasOwnProperty("Homework"))
+                    {
+                        $('#hw_text').val(data.Homework);
+                    }
+                    else if(data.hasOwnProperty("error"))
+                    {
+                        alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                    }
+                }
+            });
+        });
+        $.ajax({
+            url: apiurl + "/getSubjects.php",
+            headers:{
+                key: key
+            },
+            type: "get",
+            dataType: "json",
+            success: function(data) {
+                if(Array.isArray(data)){
+                    data.forEach(element => {
+                        var option = $('<option subjid="' + element.ID + '">' + element.Name + '</option>');
+                        option.val(element.ID);
+                        option.appendTo($('#hw_subjects').first());
+                    });
+                    if(data.length > 1)
+                    {
+                        $('#hw_subjects').each(function() {
+                            $(this).removeAttr("disabled");
+                        });
+                        $("#hw_subjects").val("1").trigger('change');
+                    }
+                    
+                }
+                else if(data.hasOwnProperty('error'))
+                {
+                    alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                }
+            }
+        });
+        
+    </script>
+</form>
