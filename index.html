@@ -98,7 +98,10 @@
                                         });
                                     });
                                 });
-                                contentwrap.fadeIn(500);
+                                $('#maincontent').load("pages/" + $('[act]').first().attr('act'), function () {
+                                    contentwrap.fadeIn(500);
+                                });
+                                
                             }
                             else if(data.hasOwnProperty("error"))
                             {
