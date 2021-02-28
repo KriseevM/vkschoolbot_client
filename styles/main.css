@@ -37,7 +37,6 @@ h6.userdisplay
     margin-left: 10px;
     width: 60%;
     background-color: #ffffff;
-    backdrop-filter: blur(2px);
     min-height: 20%;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -135,8 +134,10 @@ input:hover, label:focus, select:focus, button:focus {
 }
 input[type="text"], input[type="password"], select
 {
+    padding-left: 10px;
+    padding-right: 10px;
     background-color: #cccccc;
-    border: 1px solid #1318ff;
+    border: 1px solid #cccccc;
     border-radius: 15px;
     transition:ease-in-out 0.2s;
 }
@@ -144,11 +145,11 @@ input[type="text"]:focus, input[type="password"]:focus, select:focus
 {
      background-color: #ffffff;
      border: 1px solid black;
-     border-radius: 5px;
+     border-radius: 2px;
      transition:ease-in-out 0.2s;
 }
 input[type="text"]:hover, input[type="password"]:hover, select:hover {
-    background-color: #dfdfdf;
+    background-color: #eeeeee;
     border: 1px solid white;
     border-radius: 10px;
     transition: ease-in-out 0.2s;
