@@ -154,3 +154,26 @@ input[type="text"]:hover, input[type="password"]:hover, select:hover {
     border-radius: 10px;
     transition: ease-in-out 0.2s;
 }
+textarea
+{
+    border-radius: 10px;
+    border: 1px solid #cccccc;
+    background-color: #cccccc;
+    padding-left: 8px;
+    padding-right: 8px;
+    transition: ease-in-out 0.2s;
+}
+textarea:hover {
+    border-radius: 8px;
+    border: 1px solid #ffffff;
+    background-color: #eeeeee;
+    padding-left: 8px;
+    padding-right: 8px;
+    transition: ease-in-out 0.2s;
+}
+textarea:focus{
+    background-color: #ffffff;
+    border: 1px solid black;
+    border-radius: 2px;
+    transition:ease-in-out 0.2s;
+}
