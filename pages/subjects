@@ -1,1 +1,121 @@
-<h2>Скоро будет</h2>
+<h2>Добавление и удаление предметов</h2>
+
+<form id="subjectadd">
+  <h3>Добавить предмет</h3>
+  <input type="text" id="subjectadd_name" placeholder="Имя предмета" />
+  <input type="submit" value="Добавить" id="subjectadd_submit" />
+</form>
+<hr />
+<form id="subjectadd">
+    <h3>Удалить предмет</h3>
+    <select id="subjectdel_select">
+    </select>
+    <input type="submit" id="subjectdel_submit" value="Удалить"/>
+</form>
+<script>
+    reload();
+    $('#subjectadd_submit').click(function (e) {
+        e.preventDefault();
+        if (/^[\wА-Яа-яЁё ]{3,30}$/.test($('#subjectadd_name').value)) {
+            $.ajax({
+                url: apiurl + "/addSubjects.php",
+                headers: {
+                    key: key
+                },
+                type: "post",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({names: [$('#subjectadd_name').first().val()]}),
+                success: function (data) {
+                    if (data.hasOwnProperty("added_subjects")) {
+                        if (data.added_subjects >= 1) {
+                            
+                            $('#subjectadd_submit').value = "";
+                            
+                        }
+                        else {
+                            alert("Предмет не добавлен");
+                        }
+
+                    }
+                    else if (data.hasOwnProperty("error")) {
+                        alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                        $('#subjectadd_name').val("");
+                    }
+                    else {
+                        
+                    }
+                },
+                complete: setTimeout(() => { reload(); }, 1000)
+            });
+        }
+        else {
+            alert("Название предмета не соответствует критериям");
+        }
+    });
+    $('#subjectdel_submit').click(function(e) {
+        e.preventDefault();
+        let id = +$('option:selected', $('#subjectdel_select')).val();
+        $.ajax({
+            url: apiurl + "/deleteSubjects.php",
+            headers: {
+                key: key
+            },
+            type: "post",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({IDs: [id]}),
+            success: function(data)
+            {
+                if(data.hasOwnProperty("deleted_subjects"))
+                {
+                    if(data.deleted_subjects < 1)
+                    {
+                        alert("Предмет не удалён")
+                    }
+                }
+                else if(data.hasOwnProperty("error"))
+                {
+                    alert("Ошибка: " + data.error + "(" + data.errorcode + ")");
+                }
+            },
+            complete: setTimeout(() => { reload(); }, 1000)
+        });
+    });
+    function reload()
+    {
+        $.ajax({
+            url: apiurl + "/getSubjects.php",
+            headers: {
+                key: key
+            },
+            type: "get",
+            dataType: "json",
+            context: $("#subjectdel_select").first(),
+            success: function(data)
+            {
+                if(data){
+                    if(Array.isArray(data))
+                    {
+                        $(this).empty();
+                        data.forEach(subject => {
+                            let option = $('<option subjid="' + subject.ID + '">' + subject.Name + '</option>');
+                            option.val(subject.ID);
+                            option.appendTo($(this));
+                        });
+                    }
+                    else if(data.hasOwnProperty("error"))
+                    {
+                        alert("Ошибка при получении списка предметов: " + data.error + "(" + data.errorcode + ")");
+                    }
+                }
+                else
+                {
+                    alert("Нет ответа сервера :(");
+                }
+                
+            }
+
+        })
+    }
+</script>
